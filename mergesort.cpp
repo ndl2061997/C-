@@ -54,9 +54,17 @@ void randomArray_(array_ &A,int n){  // cho random day A voi n phan tu
 
 void mergerSort(array_ &A,int a0,int an){
     if(an-a0>0){
-        
-        mergesort(A,a0,(an-a0)%2);
+        array_ *B = new array;
+        array_ *C = new array;
+        for(i=0;i<(an-a0)%2-a0;i++){
+            insert_(B,A.A[a0+i]);
+        }
+        for(j=;j<an-(an-a0)%2+1;j++){
+            insert_(C,A.A[a0+i]);
+        }
+        mergesort(,a0,(an-a0)%2);
         mergesort(A,(an-a0)%2+1,an);
+        ;
 
     }
 }
