@@ -8,7 +8,7 @@
             "taskName": "debug",
             "command": "",
             "args": ["g++","-g", "${relativeFile}", "-o","a.exe"],
-            "showOutput": "always",
+            "showOutput": "always"
         },
         {
             "taskName": "Build and Run",
@@ -16,11 +16,12 @@
             "type": "shell",
             "command": "",
             "args": [
-             "g++","-g", "${relativeFile}", "-o","${fileBasenameNoExtension}.exe", "-and" , "${fileBasenameNoExtension}.exe"
+                "g++","-g", "${relativeFile}", "-o","${fileBasenameNoExtension}.exe", "&&" , "${fileBasenameNoExtension}.exe"
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": true  
+            
         },
         "problemMatcher": {
             "owner": "cpp",
