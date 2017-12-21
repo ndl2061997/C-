@@ -4,19 +4,19 @@
 #include <stdlib.h>
 #include <conio.h>
 
-struct Node
+struct Node  // Cấu trúc 1 nút trong cây
 {
     int data;
     Node *left;
     Node *right;
 };
 
-bool isEmpty(Node *root){
+bool isEmpty(Node *root){  // kiểm tra xem câu có rỗng không
     if(root == NULL) return true;
     else return false;
 }
 
-bool isExternal(Node *N){
+bool isExternal(Node *N){  // Kiểm tra xem 1 nút có phải lá không
     if(N->left == NULL && N->right == NULL){
         return true;
     }else{
@@ -42,14 +42,26 @@ void insertNode(Node* &root,int data){ // Truyền tham biến cho con trỏ ki�
     }
 }
 // Find Node
-bool findNode(Node * root, int data){
+Node* findNode(Node * root, int data){
     if(isEmpty(root)){
-        return false;
+        return NULL;
     }else{
-        if(data == root->data) return true;
+        if(data == root->data) return root;
         if(data < root->data) return findNode(root->left,data);
         if(data > root->data) return findNode(root->right,data);
     }
+}
+
+Node* findMasterNode(Node * root, int data){
+    if (findNode(root,data) == NULL) return NULL;
+    Node* p = root;
+    Node* f = NULL;
+    do{
+        if(p->data == data) return f;
+        f = p;
+        if (p->data > data) p = p->left;
+        else if (p->data < data) p = p->right;
+    } while (p != NULL);
 }
 
 // Các thuật toán duyệt cây
@@ -79,20 +91,50 @@ void postOrder(Node* root){
     }
 }
 
+// delete Node
+bool deleteNode(Node* root,int data){
+    Node* p = findNode(root,data);
+    if(p == NULL ) return false;
+    if(p->left == NULL || p->right == NULL){    
+        if(p->left == NULL && p->right == NULL){  // Nút cần xóa là 1 lá
+            Node * f = findMasterNode(root,data); // Tìm nút cha của nút  cần xóa.
+            if(f != NULL && f->data > data) f->left = NULL;  // Xóa nút.
+            else f->right = NULL; 
+        }else if(p->left != NULL){  // Nút cần xóa chỉ có con trái
+            p->data = p->left->data;
+            p->left = NULL;
+        }else if(p->right != NULL){ // Nút cần xóa chỉ có con phải
+            p->data = p->right->data;
+            p->right = NULL;
+        }
+    }else{  // Nút cần xóa có cả 2 con
+        Node* q = p->right;
+        while (q->left != NULL) q = q->left; // Tìm nút trái nhất của cây con phải
+        int temp = q->data;
+        deleteNode(p,temp);  // Xóa nốt p ra khỏi cây
+        p->data = temp;
+    }
+}
+
 int main(){
     Node * root = NULL;
     insertNode(root,6);
     insertNode(root,5);
-    insertNode(root,7);
-    insertNode(root,10);
+    insertNode(root,9);
+    insertNode(root,15);
     insertNode(root,2);
     insertNode(root,4);
     insertNode(root,1);
+    insertNode(root,16);
+    insertNode(root,17);
+    insertNode(root,13);
+    insertNode(root,12);
+    insertNode(root,14);
+    insertNode(root,11);
     std::cout << "preOrder: " << '\n';
     preOrder(root);
-    std::cout << '\n'<<"inOrder: " << '\n';
-    inOrder(root);
-    std::cout << '\n' << "postOrder:" << '\n';
-    postOrder(root);
+    deleteNode(root,14);
+    std::cout << '\n' << "preOrder: " << '\n';
+    preOrder(root);
     return 0;
 }
