@@ -53,6 +53,7 @@ Node* findNode(Node * root, int data){
 }
 
 Node* findMasterNode(Node * root, int data){
+    if(isEmpty(root) ) return NULL;
     if (findNode(root,data) == NULL) return NULL;
     Node* p = root;
     Node* f = NULL;
@@ -92,27 +93,29 @@ void postOrder(Node* root){
 }
 
 // delete Node
-bool deleteNode(Node* root,int data){
+bool deleteNode(Node* &root,int data){
     Node* p = findNode(root,data);
     if(p == NULL ) return false;
-    if(p->left == NULL || p->right == NULL){    
-        if(p->left == NULL && p->right == NULL){  // Nút cần xóa là 1 lá
-            Node * f = findMasterNode(root,data); // Tìm nút cha của nút  cần xóa.
-            if(f != NULL && f->data > data) f->left = NULL;  // Xóa nút.
-            else f->right = NULL; 
-        }else if(p->left != NULL){  // Nút cần xóa chỉ có con trái
-            p->data = p->left->data;
-            p->left = NULL;
-        }else if(p->right != NULL){ // Nút cần xóa chỉ có con phải
-            p->data = p->right->data;
-            p->right = NULL;
-        }
-    }else{  // Nút cần xóa có cả 2 con
+    if((p->left !=NULL && p->right != NULL) || (p->left == NULL && p->right != NULL)) {  // Nút cần xóa có cả 2 con hoặc chỉ có con phải
         Node* q = p->right;
         while (q->left != NULL) q = q->left; // Tìm nút trái nhất của cây con phải
         int temp = q->data;
-        deleteNode(p,temp);  // Xóa nốt p ra khỏi cây
+        deleteNode(root,temp);  // Xóa nốt q ra khỏi cây
         p->data = temp;
+    } else if(p->left != NULL && p->right == NULL){  // Nút cần xóa chỉ có con trái
+        Node* q = p->left;
+        while (q->right != NULL) q = q->right; // Tìm nút phải nhất của con trái
+        int temp = q->data;
+        deleteNode(root,temp);  // Xóa nốt q ra khỏi cây
+        p->data = temp;
+    } else if (p->left == NULL && p->right == NULL){  // Nút cần xóa là nút lá
+        Node* f = findMasterNode(root,data);
+        if(f == NULL){
+            root = NULL;
+        } else {
+            if(f->data > data) f->left = NULL;
+            if(f->data < data) f->right = NULL;
+        }
     }
 }
 
@@ -133,8 +136,10 @@ int main(){
     insertNode(root,11);
     std::cout << "preOrder: " << '\n';
     preOrder(root);
-    deleteNode(root,14);
+    deleteNode(root,6);
+    deleteNode(root,9);
+    deleteNode(root,11);
     std::cout << '\n' << "preOrder: " << '\n';
     preOrder(root);
     return 0;
-}
+}                                                                                         
