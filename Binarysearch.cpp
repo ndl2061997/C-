@@ -1,9 +1,23 @@
-// insertion sort
-
+// BINARY SEARCH
 
 #include <iostream>
 #include <conio.h>
 #include <ctime>
+// Binary search
+
+int binarysearch(int *A,int l, int r, int data){
+    if(data<A[l] || data > A[r]){
+        return -1;
+    }else{
+        int mid = (r+l)/2;
+        int key = A[mid];
+        if(data == key) return mid;
+        if(data < key) return binarysearch(A,l,mid,data);
+        if(data > key) return binarysearch(A,mid,r,data);
+    }
+}
+
+// Insertsoft
 
 void insertionSort(int *A,int l, int r){
     int i,j,key;
@@ -26,13 +40,18 @@ int main(){
     for (int i = 0 ; i<10; i++){
         A[i] = rand()%99+1;
     }
-    for(int i =0; i<10;i++){
-        std::cout << A[i] << " ";
-    }
-    std::cout  << '\n';
     insertionSort(A,0,9);
     for(int i =0; i<10;i++){
         std::cout << A[i] << " ";
+    }
+    std::cout  << '\n' << "Nhap so can tim : ";
+    int n;
+    std::cin >> n;
+    int m;
+    m = binarysearch(A,0,9,n) ;
+    if(m != -1){
+        std::cout << "ket qua : tim thay " << '\n';
+        std::cout << "Index :" << m;
     }
     return 0;
 }

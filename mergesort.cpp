@@ -1,70 +1,65 @@
-// merge sort
+// Merge Sort
 
 #include <iostream>
-#include <stdlib.h>
+#include <conio.h>
+#include <ctime>
+// Merge
+void merge(int * A, int a1,int a2, int * B , int b1, int b2, int *C){
+    int i;
+    i = 0;
+    while (a1<=a2 && b1<=b2){
+        if(A[a1]< B[b1]){
+            C[i] = A[a1];
+            a1 ++;
+            i++;
+        }else if(A[a1]>= B[b1]){
+            C[i] = B[b1];
+            b1 ++;
+            i++;
+        }
+    }
+    if(a1>a2){
+        for(int j = b1;j<=b2;j++){
+            C[i] = B[j];
+            i++;
+        }
+    }
+    if(b1>b2){
+        for(int j = a1;j<=a2;j++){
+            C[i] = A[j];
+            i++;
+        }
+    }
+}
 
-struct array_{  // dinh nghia mang
+// mergesort
+
+void mergesort(int *A, int a, int b){
+    if(a<b){
+        int j = 0;
+        mergesort(A,a,(a+b)/2);
+        mergesort(A,(a+b)/2+1,b);
+        int C[b-a+1];
+        merge(A,a,(a+b)/2,A,(a+b)/2 +1,b,C);
+        for(int i = a; i<=b ;i ++){
+            A[i] = C[j];
+            j++;
+        }
+    }
+}
+
+int main(){
     int A[100];
-    int len;
-}
- // Trộn 2 dãy đã sắp
-void merge(array_ &A,array_ &B,array_ &C){  
-    if(A.len == 0 && B.len >0 ){
-        insert_(C,removeMin(B));
-        mergt(A,B,C);
-    } else if(B.len == 0 && A.len >0){
-        insert_(C,removeMin(A));
-        merge(A,B,C);
-    } else if(B.len <> 0 && A.len <>0){
-        if(A.A[0]<B.A[0]){
-            insert_(C,removeMin(A));
-            merge(A,B,C);
-        }
-        if(B.A[0]<A.A[0]){
-            insert_(C,removeMin(B));
-            merge(A,B,C);
-        }
+    srand(time(NULL));
+    for (int i = 0 ; i<10; i++){
+        A[i] = rand()%99+1;
     }
-}
-// thêm 1 phần tử vào mảng
-void insert_(array_ &A,int data){
-    A.A[A.len] = data;
-    A.len ++;
-}
-// lấy ra phần tử nhỏ nhất trong mảng và xóa nó khỏi mảng
-int removeMin(array_ &A){
-    int data = A.A[0];
-    for (int i = 0; i < A.len -1; i++)
-    {
-        A.A[i] = A.A[i+1];
+    for(int i =0; i<10;i++){
+        std::cout << A[i] << " ";
     }
-    A.len --;
-    return data;
-}
-
-// Ham cho day ngau nhien
-
-void randomArray_(array_ &A,int n){  // cho random day A voi n phan tu
-    for(int i = 0;i<n;i++){
-        insert_(A,rand()%100);
-    }
-}
-
-// sắp xếp trộn dùng đệ quy
-
-void mergerSort(array_ &A,int a0,int an){
-    if(an-a0>0){
-        array_ *B = new array;
-        array_ *C = new array;
-        for(i=0;i<(an-a0)%2-a0;i++){
-            insert_(B,A.A[a0+i]);
-        }
-        for(j=;j<an-(an-a0)%2+1;j++){
-            insert_(C,A.A[a0+i]);
-        }
-        mergesort(,a0,(an-a0)%2);
-        mergesort(A,(an-a0)%2+1,an);
-        ;
-
+    std::cout  << '\n';
+    mergesort(A,0,9);
+    for(int i =0; i<10;i++){
+        std::cout << A[i] << " ";
     }
 }
